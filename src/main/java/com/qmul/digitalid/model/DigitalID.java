@@ -1,12 +1,16 @@
 package com.qmul.digitalid.model;
 
+import java.time.LocalDate;
+
 public class DigitalID {
     private final String id;
-    private final String nationalIdNumber; // immutable
+    private final String nationalIdNumber;
+    private final LocalDate dateOfBirth;
+
     private String firstName;
-    private String lastName;// mutable by central authority
+    private String lastName;
     private String address;
-    private String nationality; // mutable
+    private String nationality;
     private DigitalIDStatus status;
 
     public DigitalID(String id, String nationalIdNumber, String firstName, String lastName, String address, String nationality, DigitalIDStatus status) {
@@ -25,6 +29,7 @@ public class DigitalID {
     public String getNationalIdNumber() {
         return nationalIdNumber;
     }
+    private LocalDate getDateOfBirth() {return dateOfBirth;}
     public String getFirstName() {
         return firstName;
     }
@@ -44,6 +49,24 @@ public class DigitalID {
         this.status = status;
     }
 
+    //package private methods for the service layer
+    void suspend() {
+        this.status = DigitalIDStatus.SUSPENDED;
+    }
+
+    void reactivate() {
+        this.status = DigitalIDStatus.ACTIVE;
+    }
+
+    void revoke() {
+        this.status = DigitalIDStatus.REVOKED;
+    }
+
+    @Override
+    public String toString() {
+        return "DigitalID{id='" + id + "', name='" + firstName + " " + lastName +
+                "', status=" + status + ", nationalId='" + nationalIdNumber + "'}";
+    }
 
 
 }
