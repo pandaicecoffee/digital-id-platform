@@ -1,6 +1,7 @@
 package com.qmul.digitalid.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class DigitalID {
     private final String id;
@@ -13,14 +14,15 @@ public class DigitalID {
     private String nationality;
     private DigitalIDStatus status;
 
-    public DigitalID(String id, String nationalIdNumber, String firstName, String lastName, String address, String nationality, DigitalIDStatus status) {
-        this.id = id;
-        this.nationalIdNumber = nationalIdNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.nationality = nationality;
-        this.status = status;
+    public DigitalID(String id, String nationalIdNumber, LocalDate dateOfBirth, String firstName, String lastName, String address, String nationality, DigitalIDStatus status) {
+        this.id = Objects.requireNonNull(id, "ID must not be null");
+        this.nationalIdNumber = Objects.requireNonNull(nationalIdNumber, "National ID number must not be null");
+        this.dateOfBirth = Objects.requireNonNull(dateOfBirth, "Date of birth must not be null");
+        this.firstName = Objects.requireNonNull(firstName, "First name must not be null");
+        this.lastName = Objects.requireNonNull(lastName, "Last name must not be null");
+        this.address = Objects.requireNonNull(address, "Address must not be null");
+        this.nationality = Objects.requireNonNull(nationality, "Nationality must not be null");
+        this.status = DigitalIDStatus.ACTIVE;
     }
 
     public String getId() {
@@ -50,6 +52,24 @@ public class DigitalID {
     }
 
     //package private methods for the service layer
+    void updateFirstName(String firstName) {
+        this.firstName = Objects.requireNonNull(firstName, "First name must not be null");
+    }
+
+    void updateLastName(String lastName) {
+        this.lastName = Objects.requireNonNull(lastName, "Last name must not be null");
+    }
+
+    void updateAddress(String address) {
+        this.address = Objects.requireNonNull(address, "Address must not be null");
+    }
+
+    void updateNationality(String nationality) {
+        this.nationality = Objects.requireNonNull(nationality, "Nationality must not be null");
+    }
+
+
+
     void suspend() {
         this.status = DigitalIDStatus.SUSPENDED;
     }
