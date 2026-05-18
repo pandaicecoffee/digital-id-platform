@@ -44,17 +44,29 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
     @Override
     public void updateFirstName(String id, String newFirstName, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
 
+        digitalID.updateFirstName(newFirstName);
+
+        repository.save(digitalID);
     }
 
     @Override
     public void updateLastName(String id, String newLastName, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
 
+        digitalID.updateLastName(newLastName);
+
+        repository.save(digitalID);
     }
 
     @Override
     public void updateAddress(String id, String newAddress, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
 
+        digitalID.updateAddress(newAddress);
+
+        repository.save(digitalID);
     }
 
     @Override

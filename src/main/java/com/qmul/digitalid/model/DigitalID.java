@@ -49,15 +49,15 @@ public class DigitalID {
     }
 
     //package private methods for the service layer
-    void updateFirstName(String firstName) {
+    public void updateFirstName(String firstName) {
         this.firstName = Objects.requireNonNull(firstName, "First name must not be null");
     }
 
-    void updateLastName(String lastName) {
+    public void updateLastName(String lastName) {
         this.lastName = Objects.requireNonNull(lastName, "Last name must not be null");
     }
 
-    void updateAddress(String address) {
+    public void updateAddress(String address) {
         this.address = Objects.requireNonNull(address, "Address must not be null");
     }
 
