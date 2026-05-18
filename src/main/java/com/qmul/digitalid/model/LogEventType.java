@@ -1,0 +1,12 @@
+package com.qmul.digitalid.model;
+
+public enum LogEventType {
+    IDENTITY_CREATED,
+    IDENTITY_UPDATED,
+    STATUS_SUSPENDED,
+    STATUS_REACTIVATED,
+    STATUS_REVOKED,
+    VERIFICATION_SUCCESS,
+    VERIFICATION_FAILED,
+    OPERATION_REJECTED
+}
