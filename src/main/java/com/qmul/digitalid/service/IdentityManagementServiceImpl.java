@@ -1,6 +1,7 @@
 package com.qmul.digitalid.service;
 
 import com.qmul.digitalid.exception.DigitalIdNotFoundException;
+import com.qmul.digitalid.exception.InvalidOperationException;
 import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.repository.DigitalIdRepository;
 
@@ -73,6 +74,12 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     public void suspendIdentity(String id, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
+        if (!digitalID.getStatus().canBeSuspended()) {
+            throw new InvalidOperationException(
+                    "Cannot suspend Digital ID " + id
+            );
+        }
+
         digitalID.suspend();
 
         repository.save(digitalID);
@@ -81,6 +88,12 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     @Override
     public void reactivateIdentity(String id, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
+
+        if (!digitalID.getStatus().canBeReactivated()) {
+            throw new InvalidOperationException(
+                    "Cannot reactivate Digital ID " + id
+            );
+        }
 
         digitalID.reactivate();
 
@@ -91,6 +104,12 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     public void revokeIdentity(String id, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
+        if (!digitalID.getStatus().canBeRevoked()) {
+            throw new InvalidOperationException(
+                    "Cannot revoke Digital ID " + id
+            );
+        }
+
         digitalID.revoke();
 
         repository.save(digitalID);
@@ -99,6 +118,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     @Override
     public DigitalID findById(String id) {
         return getOrThrow(id);
+
     }
 
     private DigitalID getOrThrow(String id) {
