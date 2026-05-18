@@ -56,6 +56,8 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     public void updateFirstName(String id, String newFirstName, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
+        guardAgainstRevoked(digitalID, requestedBy, "update first name");
+
         digitalID.updateFirstName(newFirstName);
 
         logService.record(
@@ -72,6 +74,8 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     public void updateLastName(String id, String newLastName, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
+        guardAgainstRevoked(digitalID, requestedBy, "update last name");
+
         digitalID.updateLastName(newLastName);
 
         logService.record(
@@ -87,7 +91,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     @Override
     public void updateAddress(String id, String newAddress, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
-
+        guardAgainstRevoked(digitalID, requestedBy, "update address");
         digitalID.updateAddress(newAddress);
 
         logService.record(
@@ -175,6 +179,27 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     private DigitalID getOrThrow(String id) {
         return repository.findById(id)
                 .orElseThrow(() -> new DigitalIdNotFoundException(id));
+    }
+
+    private void guardAgainstRevoked(DigitalID digitalID,
+                                     String requestedBy,
+                                     String operation) {
+
+        if (digitalID.getStatus() == DigitalIDStatus.REVOKED) {
+
+            logService.record(
+                    LogEventType.OPERATION_REJECTED,
+                    digitalID.getId(),
+                    requestedBy,
+                    "Rejected " + operation + " on revoked identity"
+            );
+
+            throw new InvalidOperationException(
+                    "Cannot " + operation
+                            + " on a revoked Digital ID: "
+                            + digitalID.getId()
+            );
+        }
     }
 }
 
