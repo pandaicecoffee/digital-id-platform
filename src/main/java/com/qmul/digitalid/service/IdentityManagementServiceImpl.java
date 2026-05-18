@@ -20,6 +20,11 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
     @Override
     public DigitalID createIdentity(String nationalIdNumber, String firstName, String lastName, LocalDate dateOfBirth, String address, String nationality, String requestedBy) {
+
+        if (repository.existsByNationalIdNumber(nationalIdNumber)) {
+            throw new DuplicateIdentityException(nationalIdNumber);
+        }
+
         String id = UUID.randomUUID().toString();
 
         DigitalID digitalID = new DigitalID(
