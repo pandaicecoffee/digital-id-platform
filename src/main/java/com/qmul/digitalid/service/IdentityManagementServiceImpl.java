@@ -1,8 +1,10 @@
 package com.qmul.digitalid.service;
 
 import com.qmul.digitalid.exception.DigitalIdNotFoundException;
+import com.qmul.digitalid.exception.DuplicateIdentityException;
 import com.qmul.digitalid.exception.InvalidOperationException;
 import com.qmul.digitalid.model.DigitalID;
+import com.qmul.digitalid.model.LogEventType;
 import com.qmul.digitalid.repository.DigitalIdRepository;
 
 import java.time.LocalDate;
@@ -36,9 +38,16 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
                 dateOfBirth,
                 address,
                 nationality
-        )
+        );
 
         repository.save(digitalID);
+
+        logService.record(
+                LogEventType.IDENTITY_CREATED,
+                id,
+                requestedBy,
+                "Created identity for " + firstName + " " + lastName
+        );
 
         return digitalID;
     }
@@ -49,6 +58,13 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
         digitalID.updateFirstName(newFirstName);
 
+        logService.record(
+                LogEventType.IDENTITY_UPDATED,
+                id,
+                requestedBy,
+                "First name updated to: " + newFirstName
+        );
+
         repository.save(digitalID);
     }
 
@@ -58,6 +74,13 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
         digitalID.updateLastName(newLastName);
 
+        logService.record(
+                LogEventType.IDENTITY_UPDATED,
+                id,
+                requestedBy,
+                "Last name updated to: " + newLastName
+        );
+
         repository.save(digitalID);
     }
 
@@ -66,6 +89,13 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
         DigitalID digitalID = getOrThrow(id);
 
         digitalID.updateAddress(newAddress);
+
+        logService.record(
+                LogEventType.IDENTITY_UPDATED,
+                id,
+                requestedBy,
+                "Address updated to: " + newAddress
+        );
 
         repository.save(digitalID);
     }
@@ -82,6 +112,13 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
         digitalID.suspend();
 
+        logService.record(
+                LogEventType.STATUS_SUSPENDED,
+                id,
+                requestedBy,
+                "Identity suspended"
+        );
+
         repository.save(digitalID);
     }
 
@@ -97,6 +134,13 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
         digitalID.reactivate();
 
+        logService.record(
+                LogEventType.STATUS_REACTIVATED,
+                id,
+                requestedBy,
+                "Identity reactivated"
+        );
+
         repository.save(digitalID);
     }
 
@@ -111,6 +155,13 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
         }
 
         digitalID.revoke();
+
+        logService.record(
+                LogEventType.STATUS_REVOKED,
+                id,
+                requestedBy,
+                "Identity revoked"
+        );
 
         repository.save(digitalID);
     }
