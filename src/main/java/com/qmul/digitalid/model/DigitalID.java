@@ -67,15 +67,15 @@ public class DigitalID {
 
 
 
-    void suspend() {
+    public void suspend() {
         this.status = DigitalIDStatus.SUSPENDED;
     }
 
-    void reactivate() {
+    public void reactivate() {
         this.status = DigitalIDStatus.ACTIVE;
     }
 
-    void revoke() {
+    public void revoke() {
         this.status = DigitalIDStatus.REVOKED;
     }
 

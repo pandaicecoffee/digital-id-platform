@@ -71,17 +71,29 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
     @Override
     public void suspendIdentity(String id, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
 
+        digitalID.suspend();
+
+        repository.save(digitalID);
     }
 
     @Override
     public void reactivateIdentity(String id, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
 
+        digitalID.reactivate();
+
+        repository.save(digitalID);
     }
 
     @Override
     public void revokeIdentity(String id, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
 
+        digitalID.revoke();
+
+        repository.save(digitalID);
     }
 
     @Override
