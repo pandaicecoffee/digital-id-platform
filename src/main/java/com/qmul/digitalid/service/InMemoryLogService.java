@@ -5,8 +5,9 @@ import com.qmul.digitalid.model.LogEventType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class InMemoryLogService {
+public class InMemoryLogService implements LogService {
 
     private final List<LogEvent> logEvents = new ArrayList<>();
 
@@ -18,6 +19,18 @@ public class InMemoryLogService {
     @Override
     public List<LogEvent> getAll() {
         return List.copyOf(logEvents);
+    }
+
+    @Override
+    public List<LogEvent> getByDigitalId(String digitalIdRef) {
+        return logEvents.stream()
+                .filter(e -> e.getDigitalIdRef().equals(digitalIdRef))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void printAll() {
+        logEvents.forEach(System.out::println);
     }
 
 }
