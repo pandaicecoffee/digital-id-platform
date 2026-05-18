@@ -14,7 +14,7 @@ public class DigitalID {
     private String nationality;
     private DigitalIDStatus status;
 
-    public DigitalID(String id, String nationalIdNumber, LocalDate dateOfBirth, String firstName, String lastName, String address, String nationality, DigitalIDStatus status) {
+    public DigitalID(String id, String nationalIdNumber, String firstName, String lastName, LocalDate dateOfBirth, String address, String nationality) {
         this.id = Objects.requireNonNull(id, "ID must not be null");
         this.nationalIdNumber = Objects.requireNonNull(nationalIdNumber, "National ID number must not be null");
         this.dateOfBirth = Objects.requireNonNull(dateOfBirth, "Date of birth must not be null");
