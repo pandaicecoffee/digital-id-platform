@@ -47,9 +47,6 @@ public class DigitalID {
     public DigitalIDStatus getStatus() {
         return status;
     }
-    public void setStatus(DigitalIDStatus status) {
-        this.status = status;
-    }
 
     //package private methods for the service layer
     void updateFirstName(String firstName) {
