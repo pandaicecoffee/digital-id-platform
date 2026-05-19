@@ -4,10 +4,7 @@ import com.qmul.digitalid.exception.InvalidOperationException;
 import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.portal.VerificationPortal;
 import com.qmul.digitalid.portal.VerificationResult;
-import com.qmul.digitalid.portal.implementation.CentralAuthorityPortal;
-import com.qmul.digitalid.portal.implementation.DrivingLicenceAuthorityPortal;
-import com.qmul.digitalid.portal.implementation.EmployerPortal;
-import com.qmul.digitalid.portal.implementation.TaxAuthorityPortal;
+import com.qmul.digitalid.portal.implementation.*;
 import com.qmul.digitalid.repository.InMemoryDigitalIdRepository;
 import com.qmul.digitalid.service.*;
 
@@ -42,6 +39,9 @@ public class Main {
 
         EmployerPortal employerPortal =
                 new EmployerPortal(consumptionService);
+
+        BankPortal bankPortal = new BankPortal(consumptionService);
+        AirportServicesPortal airportPortal = new AirportServicesPortal(consumptionService);
 
 
         section("SCENARIO 1 — Identity Creation");
