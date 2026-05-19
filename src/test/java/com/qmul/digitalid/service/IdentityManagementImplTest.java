@@ -87,7 +87,7 @@ class IdentityManagementImplTest {
         assertThrows(IllegalArgumentException.class, () ->
                 service.updateFirstName(id.getId(), "  ", "Test"));
     }
-    
+
     @Test
     void canSuspendActiveIdentity() {
         DigitalID id = createAleena();
