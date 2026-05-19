@@ -1,6 +1,7 @@
 package com.qmul.digitalid.repository;
 
 import com.qmul.digitalid.model.DigitalID;
+import com.qmul.digitalid.model.DigitalIDOperations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -82,7 +83,7 @@ class InMemoryDigitalIdRepositoryTest {
     void savingUpdatedIdentityOverwritesPreviousEntry() {
         DigitalID identity = buildIdentity("id-001", "NIN-001");
         repository.save(identity);
-        identity.suspend();
+        DigitalIDOperations.suspend(identity);
         repository.save(identity);
         DigitalID retrieved = repository.findById("id-001").orElseThrow();
         assertEquals(com.qmul.digitalid.model.DigitalIDStatus.SUSPENDED, retrieved.getStatus());
