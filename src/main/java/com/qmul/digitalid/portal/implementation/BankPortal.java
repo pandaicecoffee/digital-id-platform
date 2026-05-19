@@ -23,6 +23,8 @@ public class BankPortal implements VerificationPortal {
     @Override
     public VerificationResult verify(String identificationID) {
         VerificationResult result = consumptionService.verifyIsActive(identificationID, ORG_NAME);
+
+        //bank only gets valid or invalid - kept vague for a reason
         if (result.valid()) {
             return new VerificationResult(true, "Identity verified");
         }
