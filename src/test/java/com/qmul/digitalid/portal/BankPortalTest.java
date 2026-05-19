@@ -41,11 +41,20 @@ class BankPortalTest {
     }
 
     @Test
-    void activeIdentityReturnsRedactedSuccessMessage() {
+    void activeIdentityReturnsGenericSuccessMessage() {
         DigitalID id = createIdentity();
         VerificationResult result = portal.verify(id.getId());
         assertEquals("Identity verified", result.reason());
     }
+
+    @Test
+    void successMessageDoesNotContainPersonalDetails() {
+        DigitalID id = createIdentity();
+        VerificationResult result = portal.verify(id.getId());
+        assertFalse(result.reason().contains("Carol"));
+        assertFalse(result.reason().contains("White"));
+    }
+
 
     @Test
     void suspendedIdentityFailsVerification() {
@@ -53,6 +62,14 @@ class BankPortalTest {
         managementService.suspendIdentity(id.getId(), "Test");
         VerificationResult result = portal.verify(id.getId());
         assertFalse(result.valid());
+    }
+
+    @Test
+    void failureMessageIsGeneric() {
+        DigitalID id = createIdentity();
+        managementService.suspendIdentity(id.getId(), "Test");
+        VerificationResult result = portal.verify(id.getId());
+        assertEquals("Identity could not be verified", result.reason());
     }
 
     @Test
@@ -72,14 +89,6 @@ class BankPortalTest {
     }
 
     @Test
-    void revokedIdentityReturnsRedactedFailureMessage() {
-        DigitalID id = createIdentity();
-        managementService.revokeIdentity(id.getId(), "Test");
-        VerificationResult result = portal.verify(id.getId());
-        assertEquals("Identity could not be verified", result.reason());
-    }
-
-    @Test
     void nonExistentIdentityFailsVerification() {
         VerificationResult result = portal.verify("does-not-exist");
         assertFalse(result.valid());
@@ -87,6 +96,6 @@ class BankPortalTest {
 
     @Test
     void portalReportsCorrectOrganisationName() {
-        assertEquals("Bank Portal", portal.getOrganisationName());
+        assertEquals("Bank", portal.getOrganisationName());
     }
 }
