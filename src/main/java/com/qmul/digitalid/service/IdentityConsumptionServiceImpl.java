@@ -2,7 +2,6 @@ package com.qmul.digitalid.service;
 
 
 import com.qmul.digitalid.model.DigitalID;
-import com.qmul.digitalid.model.DigitalIDStatus;
 import com.qmul.digitalid.model.LogEvent;
 import com.qmul.digitalid.model.LogEventType;
 import com.qmul.digitalid.portal.VerificationResult;
@@ -33,7 +32,7 @@ public class IdentityConsumptionServiceImpl implements IdentityConsumptionServic
 
         DigitalID digitalID = found.get();
 
-        if (digitalID.getStatus() == DigitalIDStatus.REVOKED) {
+        if (!digitalID.getStatus().isUsableByConsumers()) {
             logService.record(LogEventType.VERIFICATION_FAILED, digitalIdRef,
                     requestedBy, "ID is revoked");
             return new VerificationResult(false, "Digital ID has been permanently revoked");

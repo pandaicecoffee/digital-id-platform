@@ -186,7 +186,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
                                      String requestedBy,
                                      String operation) {
 
-        if (digitalID.getStatus() == DigitalIDStatus.REVOKED) {
+        if (!digitalID.getStatus().canBeUpdated()) {
 
             logService.record(
                     LogEventType.OPERATION_REJECTED,
