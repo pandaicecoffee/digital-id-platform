@@ -1,12 +1,18 @@
 package com.qmul.digitalid.portal.implementation;
 
+import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.portal.VerificationPortal;
 import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.service.IdentityConsumptionService;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Optional;
+
 public class DrivingLicenceAuthorityPortal implements VerificationPortal {
 
     private static final String ORG_NAME = "Driving Licence Authority";
+    private static final int MINIMUM_DRIVING_AGE = 17;
     private final IdentityConsumptionService consumptionService;
 
     public DrivingLicenceAuthorityPortal(IdentityConsumptionService consumptionService) {
