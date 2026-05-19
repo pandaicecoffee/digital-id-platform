@@ -1,7 +1,6 @@
 package com.qmul.digitalid.portal.implementation;
 
 import com.qmul.digitalid.model.DigitalID;
-import com.qmul.digitalid.model.DigitalIDStatus;
 import com.qmul.digitalid.portal.VerificationPortal;
 import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.service.IdentityConsumptionService;
