@@ -1,7 +1,5 @@
 package com.qmul.digitalid.model;
 
-import java.awt.*;
-
 public enum DigitalIDStatus {
     ACTIVE,
     SUSPENDED,
