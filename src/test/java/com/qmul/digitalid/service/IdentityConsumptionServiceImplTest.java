@@ -61,4 +61,28 @@ class IdentityConsumptionServiceImplTest {
         assertNotNull(result.reason());
         assertFalse(result.reason().isBlank());
     }
+
+    @Test
+    void identitySuspendedDuringPeriodFailsPeriodVerification() {
+        DigitalID id = createAlice();
+        managementService.suspendIdentity(id.getId(), "Test");
+        VerificationResult result = consumptionService.verifyActiveForPeriod(
+                id.getId(),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.now(),
+                "Tax Authority"
+        );
+        assertFalse(result.valid());
+    }
+
+    @Test
+    void lookupReturnsEmptyForUnknownId() {
+        assertTrue(consumptionService.lookup("unknown-id", "Test").isEmpty());
+    }
+
+    @Test
+    void lookupReturnsIdentityWhenExists() {
+        DigitalID id = createAlice();
+        assertTrue(consumptionService.lookup(id.getId(), "Test").isPresent());
+    }
 }
