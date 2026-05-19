@@ -52,6 +52,24 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
         return digitalID;
     }
 
+    private void applyAttributeUpdate(String id, String requestedBy,
+                                      String fieldName, String newValue,
+                                      Consumer<DigitalID> mutation) {
+        DigitalID digitalID = getOrThrow(id);
+        guardAgainstNonUpdatable(digitalID, requestedBy, "update " + fieldName);
+
+        DigitalIDOperations.applyUpdate(digitalID, mutation);
+
+        logService.record(
+                LogEventType.IDENTITY_UPDATED,
+                id,
+                requestedBy,
+                fieldName + " updated to: " + newValue
+        );
+
+        repository.save(digitalID);
+    }
+
     @Override
     public void updateFirstName(String id, String newFirstName, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
