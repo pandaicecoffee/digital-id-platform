@@ -21,9 +21,9 @@ public class DrivingLicenceAuthorityPortal implements VerificationPortal {
 
     @Override
     public VerificationResult verify(String identificationID) {
-        VerificationResult result = consumptionService.verifyIsActive(identificationID, ORG_NAME);
-        if (!result.valid()) {
-            return result;
+        VerificationResult activeCheck = consumptionService.verifyIsActive(identificationID, ORG_NAME);
+        if (!activeCheck.valid()) {
+            return activeCheck;
         }
         return new VerificationResult(true,
                 "Digital ID is active and eligible for licence issuance");
