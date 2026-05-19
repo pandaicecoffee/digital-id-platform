@@ -31,7 +31,8 @@ public class DigitalID {
     public String getNationalIdNumber() {
         return nationalIdNumber;
     }
-    public LocalDate getDateOfBirth() {return dateOfBirth;}
+    public LocalDate getDateOfBirth() {return LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDayOfMonth());
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -49,19 +50,19 @@ public class DigitalID {
     }
 
     public void updateFirstName(String firstName) {
-        this.firstName = Objects.requireNonNull(firstName, "First name must not be null");
+        this.firstName = requireNonBlank(firstName, "First name must not be null");
     }
 
     public void updateLastName(String lastName) {
-        this.lastName = Objects.requireNonNull(lastName, "Last name must not be null");
+        this.lastName = requireNonBlank(lastName, "Last name must not be null");
     }
 
     public void updateAddress(String address) {
-        this.address = Objects.requireNonNull(address, "Address must not be null");
+        this.address = requireNonBlank(address, "Address must not be null");
     }
 
     public void updateNationality(String nationality) {
-        this.nationality = Objects.requireNonNull(nationality, "Nationality must not be null");
+        this.nationality = requireNonBlank(nationality, "Nationality must not be null");
     }
 
 
