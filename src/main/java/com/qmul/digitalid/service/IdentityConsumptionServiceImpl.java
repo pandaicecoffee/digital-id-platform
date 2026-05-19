@@ -73,7 +73,11 @@ public class IdentityConsumptionServiceImpl implements IdentityConsumptionServic
         if (result.isPresent()) {
             logService.record(LogEventType.VERIFICATION_SUCCESS, digitalIdRef,
                     requestedBy, "Lookup performed");
+        } else {
+            logService.record(LogEventType.VERIFICATION_FAILED, digitalIdRef,
+                    requestedBy, "Lookup failed — ID not found");
         }
+
         return result;
     }
 }
