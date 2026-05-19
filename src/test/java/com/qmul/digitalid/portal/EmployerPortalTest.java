@@ -36,49 +36,47 @@ class EmployerPortalTest {
     @Test
     void activeIdentityPassesVerification() {
         DigitalID id = createIdentity();
-        VerificationResult result = portal.verify(id.getId());
-        assertTrue(result.valid());
+        assertTrue(portal.verify(id.getId()).valid());
     }
 
     @Test
-    void activeIdentityReturnsRedactedSuccessMessage() {
+    void successMessageContainsEmployeeName() {
         DigitalID id = createIdentity();
         VerificationResult result = portal.verify(id.getId());
-        assertEquals("Identity verified", result.reason());
+        assertTrue(result.reason().contains("David"));
+        assertTrue(result.reason().contains("Brown"));
     }
 
     @Test
     void suspendedIdentityFailsVerification() {
         DigitalID id = createIdentity();
         managementService.suspendIdentity(id.getId(), "Test");
-        VerificationResult result = portal.verify(id.getId());
-        assertFalse(result.valid());
+        assertFalse(portal.verify(id.getId()).valid());
     }
 
     @Test
-    void suspendedIdentityReturnsRedactedFailureMessage() {
+    void failureMessageIsGenericAndDoesNotExposeName() {
         DigitalID id = createIdentity();
         managementService.suspendIdentity(id.getId(), "Test");
         VerificationResult result = portal.verify(id.getId());
         assertEquals("Identity could not be verified", result.reason());
+        assertFalse(result.reason().contains("David"));
     }
 
     @Test
     void revokedIdentityFailsVerification() {
         DigitalID id = createIdentity();
         managementService.revokeIdentity(id.getId(), "Test");
-        VerificationResult result = portal.verify(id.getId());
-        assertFalse(result.valid());
+        assertFalse(portal.verify(id.getId()).valid());
     }
 
     @Test
     void nonExistentIdentityFailsVerification() {
-        VerificationResult result = portal.verify("does-not-exist");
-        assertFalse(result.valid());
+        assertFalse(portal.verify("does-not-exist").valid());
     }
 
     @Test
     void portalReportsCorrectOrganisationName() {
-        assertEquals("Employer Portal", portal.getOrganisationName());
+        assertEquals("Employer", portal.getOrganisationName());
     }
 }
