@@ -7,7 +7,7 @@ import com.qmul.digitalid.service.IdentityConsumptionService;
 
 public class BankPortal implements VerificationPortal {
 
-    private static final String ORG_NAME = "Bank Portal";
+    private static final String ORG_NAME = "Bank";
     private final IdentityConsumptionService consumptionService;
 
     public BankPortal(IdentityConsumptionService consumptionService) {
