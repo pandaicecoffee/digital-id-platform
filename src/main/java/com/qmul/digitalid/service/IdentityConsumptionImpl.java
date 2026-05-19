@@ -2,6 +2,7 @@ package com.qmul.digitalid.service;
 
 
 import com.qmul.digitalid.model.DigitalID;
+import com.qmul.digitalid.model.LogEventType;
 import com.qmul.digitalid.portal.VerificationResult;
 import com.qmul.digitalid.repository.DigitalIdRepository;
 
@@ -29,6 +30,11 @@ public class IdentityConsumptionImpl extends IdentityConsumptionService{
 
     @Override
     public Optional<DigitalID> lookup(String digitalIdRef, String requestedBy) {
-        return null;
+        Optional<DigitalID> result = repository.findById(digitalIdRef);
+        if (result.isPresent()) {
+            logService.record(LogEventType.VERIFICATION_SUCCESS, digitalIdRef,
+                    requestedBy, "Lookup performed");
+        }
+        return result;
     }
 }
