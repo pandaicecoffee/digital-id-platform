@@ -24,7 +24,7 @@ class CentralAuthorityPortalTest {
     }
 
     private DigitalID createAleena() {
-        return portal.createIdentity("NIN-001", "Aleena", "London",
+            return portal.createIdentity("NIN-001", "Aleena", "Joseph",
                 LocalDate.of(1990, 3, 15), "London", "British");
     }
 
