@@ -24,7 +24,7 @@ public enum DigitalIDStatus {
     }
 
     public boolean canBeRevoked() {
-        return this == REVOKED;
+        return this == ACTIVE || this == SUSPENDED;
     }
 
 
