@@ -6,7 +6,7 @@ import com.qmul.digitalid.service.IdentityConsumptionService;
 
 public class EmployerPortal implements VerificationPortal {
 
-    private static final String ORG_NAME = "Employer Portal";
+    private static final String ORG_NAME = "Employer";
     private final IdentityConsumptionService consumptionService;
 
     public EmployerPortal(IdentityConsumptionService consumptionService) {
