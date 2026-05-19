@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-class IdentityManagementServiceTest {
+class IdentityManagementImplTest {
 
     private IdentityManagementService service;
     private InMemoryDigitalIdRepository repository;
