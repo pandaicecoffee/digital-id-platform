@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DrivingLicenceAuthorityPortalTest {
+class DrivingLicenceAuthorityTest {
 
     private DrivingLicenceAuthorityPortal portal;
     private IdentityManagementService managementService;
