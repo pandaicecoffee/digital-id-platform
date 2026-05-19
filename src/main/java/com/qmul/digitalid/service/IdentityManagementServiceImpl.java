@@ -6,7 +6,6 @@ import com.qmul.digitalid.exception.InvalidOperationException;
 import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.model.LogEventType;
 import com.qmul.digitalid.repository.DigitalIdRepository;
-import com.qmul.digitalid.model.DigitalIDStatus;
 
 import java.time.LocalDate;
 import java.util.UUID;
