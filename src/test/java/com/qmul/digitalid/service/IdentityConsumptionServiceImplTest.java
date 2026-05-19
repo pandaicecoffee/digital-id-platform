@@ -1,7 +1,7 @@
 package com.qmul.digitalid.service;
 
 import com.qmul.digitalid.model.DigitalID;
-import com.qmul.digitalid.portal.VerificationResult;
+import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.repository.InMemoryDigitalIdRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -4,7 +4,7 @@ package com.qmul.digitalid.service;
 import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.model.LogEvent;
 import com.qmul.digitalid.model.LogEventType;
-import com.qmul.digitalid.portal.VerificationResult;
+import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.repository.DigitalIdRepository;
 
 import java.time.LocalDate;

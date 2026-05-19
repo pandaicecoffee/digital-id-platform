@@ -1,7 +1,7 @@
 package com.qmul.digitalid.portal.implementation;
 
 import com.qmul.digitalid.portal.VerificationPortal;
-import com.qmul.digitalid.portal.VerificationResult;
+import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.service.IdentityConsumptionService;
 
 public class EmployerPortal implements VerificationPortal {

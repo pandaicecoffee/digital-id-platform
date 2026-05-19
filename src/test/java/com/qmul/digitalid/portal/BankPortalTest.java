@@ -1,6 +1,7 @@
 package com.qmul.digitalid.portal;
 
 import com.qmul.digitalid.model.DigitalID;
+import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.portal.implementation.BankPortal;
 import com.qmul.digitalid.repository.InMemoryDigitalIdRepository;
 import com.qmul.digitalid.service.*;

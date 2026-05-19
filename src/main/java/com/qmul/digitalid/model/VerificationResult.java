@@ -1,3 +1,3 @@
-package com.qmul.digitalid.portal;
+package com.qmul.digitalid.model;
 
 public record VerificationResult(boolean valid, String reason) {}
