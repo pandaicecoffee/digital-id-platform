@@ -33,6 +33,12 @@ class DrivingLicenceAuthorityPortalTest {
                 LocalDate.of(1985, 3, 20), "Manchester", "British", "Test");
     }
 
+    private DigitalID createMinor() {
+        return managementService.createIdentity(
+                "NIN-DVL-002", "James", "Taylor",
+                LocalDate.now().minusYears(15), "London", "British", "Test");
+    }
+
     @Test
     void activeIdentityPassesVerification() {
         DigitalID id = createIdentity();
