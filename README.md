@@ -7,7 +7,7 @@ A console-based backend system for managing digital identities across a federate
 
 ## GitHub Repository
 
-...
+[Digital ID Platform](https://github.com/pandaicecoffee/digital-id-platform.git)
 
 ---
 
