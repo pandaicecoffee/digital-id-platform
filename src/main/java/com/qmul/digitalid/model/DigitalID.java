@@ -15,13 +15,13 @@ public class DigitalID {
     private DigitalIDStatus status;
 
     public DigitalID(String id, String nationalIdNumber, String firstName, String lastName, LocalDate dateOfBirth, String address, String nationality) {
-        this.id = Objects.requireNonNull(id, "ID must not be null");
-        this.nationalIdNumber = Objects.requireNonNull(nationalIdNumber, "National ID number must not be null");
+        this.id = requireNonBlank(id, "ID");
+        this.nationalIdNumber = requireNonBlank(nationalIdNumber, "National ID number");
         this.dateOfBirth = Objects.requireNonNull(dateOfBirth, "Date of birth must not be null");
-        this.firstName = Objects.requireNonNull(firstName, "First name must not be null");
-        this.lastName = Objects.requireNonNull(lastName, "Last name must not be null");
-        this.address = Objects.requireNonNull(address, "Address must not be null");
-        this.nationality = Objects.requireNonNull(nationality, "Nationality must not be null");
+        this.firstName = requireNonBlank(firstName, "First name");
+        this.lastName = requireNonBlank(lastName, "Last name");
+        this.address = requireNonBlank(address, "Address");
+        this.nationality = requireNonBlank(nationality, "Nationality");
         this.status = DigitalIDStatus.ACTIVE;
     }
 
@@ -48,7 +48,6 @@ public class DigitalID {
         return status;
     }
 
-    //package private methods for the service layer
     public void updateFirstName(String firstName) {
         this.firstName = Objects.requireNonNull(firstName, "First name must not be null");
     }
@@ -77,6 +76,14 @@ public class DigitalID {
 
     public void revoke() {
         this.status = DigitalIDStatus.REVOKED;
+    }
+
+    private static String requireNonBlank(String value, String fieldName) {
+        Objects.requireNonNull(value, fieldName + " must not be null");
+        if (value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " must not be blank");
+        }
+        return value;
     }
 
     @Override
