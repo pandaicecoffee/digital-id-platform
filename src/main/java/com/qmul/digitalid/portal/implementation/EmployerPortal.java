@@ -1,8 +1,11 @@
 package com.qmul.digitalid.portal.implementation;
 
+import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.portal.VerificationPortal;
 import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.service.IdentityConsumptionService;
+
+import java.util.Optional;
 
 public class EmployerPortal implements VerificationPortal {
 
@@ -21,12 +24,20 @@ public class EmployerPortal implements VerificationPortal {
 
     @Override
     public VerificationResult verify(String identificationID) {
-        // Employer: limited check — is it valid right now? No attribute access.
-        VerificationResult result = consumptionService.verifyIsActive(identificationID, ORG_NAME);
-        // Employer gets a simpler, redacted response
-        if (result.valid()) {
-            return new VerificationResult(true, "Identity verified");
+        VerificationResult activeCheck = consumptionService.verifyIsActive(identificationID, ORG_NAME);
+        if (!activeCheck.valid()) {
+            return new VerificationResult(false, "Identity could not be verified");
         }
-        return new VerificationResult(false, "Identity could not be verified");
+
+        Optional<DigitalID> found = consumptionService.lookup(identificationID, ORG_NAME);
+        if (found.isEmpty()) {
+            return new VerificationResult(false, "Identity could not be verified");
+        }
+
+        DigitalID identity = found.get();
+        return new VerificationResult(true,
+                "Identity verified for: " + identity.getFirstName() + " " + identity.getLastName());
     }
+
+
 }
