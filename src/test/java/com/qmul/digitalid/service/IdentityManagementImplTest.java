@@ -47,6 +47,48 @@ class IdentityManagementImplTest {
     }
 
     @Test
+    void rejectsNullFirstName() {
+        assertThrows(NullPointerException.class, () ->
+                service.createIdentity("NIN-X", null, "Smith",
+                        LocalDate.of(2000, 1, 1), "London", "British", "Test"));
+    }
+
+    @Test
+    void rejectsBlankFirstName() {
+        assertThrows(IllegalArgumentException.class, () ->
+                service.createIdentity("NIN-X", "", "Smith",
+                        LocalDate.of(2000, 1, 1), "London", "British", "Test"));
+    }
+
+    @Test
+    void rejectsWhitespaceOnlyAddress() {
+        assertThrows(IllegalArgumentException.class, () ->
+                service.createIdentity("NIN-X", "Alice", "Smith",
+                        LocalDate.of(2000, 1, 1), "   ", "British", "Test"));
+    }
+
+    @Test
+    void rejectsNullDateOfBirth() {
+        assertThrows(NullPointerException.class, () ->
+                service.createIdentity("NIN-X", "Alice", "Smith",
+                        null, "London", "British", "Test"));
+    }
+
+    @Test
+    void rejectsBlankNationality() {
+        assertThrows(IllegalArgumentException.class, () ->
+                service.createIdentity("NIN-X", "Alice", "Smith",
+                        LocalDate.of(2000, 1, 1), "London", "", "Test"));
+    }
+
+    @Test
+    void rejectsBlankValueOnUpdate() {
+        DigitalID id = createAleena();
+        assertThrows(IllegalArgumentException.class, () ->
+                service.updateFirstName(id.getId(), "  ", "Test"));
+    }
+    
+    @Test
     void canSuspendActiveIdentity() {
         DigitalID id = createAleena();
         service.suspendIdentity(id.getId(), "Test");
