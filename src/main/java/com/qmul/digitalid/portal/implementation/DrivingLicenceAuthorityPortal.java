@@ -25,6 +25,21 @@ public class DrivingLicenceAuthorityPortal implements VerificationPortal {
         if (!activeCheck.valid()) {
             return activeCheck;
         }
+
+        Optional<DigitalID> found = consumptionService.lookup(identificationID, ORG_NAME);
+        if (found.isEmpty()) {
+            return new VerificationResult(false, "Identity could not be retrieved for eligibility check");
+        }
+
+        DigitalID identity = found.get();
+        int age = Period.between(identity.getDateOfBirth(), LocalDate.now()).getYears();
+
+        if (age < MINIMUM_DRIVING_AGE) {
+            return new VerificationResult(false,
+                    "Applicant does not meet the minimum driving age of " + MINIMUM_DRIVING_AGE
+                            + " (current age: " + age + ")");
+        }
+        
         return new VerificationResult(true,
                 "Digital ID is active and eligible for licence issuance");
     }
