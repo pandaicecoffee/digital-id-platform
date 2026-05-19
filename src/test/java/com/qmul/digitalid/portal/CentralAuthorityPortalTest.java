@@ -2,7 +2,7 @@ package com.qmul.digitalid.portal;
 
 import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.model.DigitalIDStatus;
-import com.qmul.digitalid.portal.impl.CentralAuthorityPortal;
+import com.qmul.digitalid.portal.implementation.CentralAuthorityPortal;
 import com.qmul.digitalid.repository.InMemoryDigitalIdRepository;
 import com.qmul.digitalid.service.*;
 import org.junit.jupiter.api.BeforeEach;

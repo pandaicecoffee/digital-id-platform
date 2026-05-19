@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-class IdentityConsumptionImplTest {
+class IdentityConsumptionServiceImplTest {
 
     private IdentityManagementService managementService;
     private IdentityConsumptionService consumptionService;
@@ -18,7 +18,7 @@ class IdentityConsumptionImplTest {
         InMemoryDigitalIdRepository repository = new InMemoryDigitalIdRepository();
         LogService logService = new InMemoryLogService();
         managementService = new IdentityManagementServiceImpl(repository, logService);
-        consumptionService = new IdentityConsumptionImpl(repository, logService);
+        consumptionService = new IdentityConsumptionServiceImpl(repository, logService);
     }
 
     private DigitalID createAlice() {

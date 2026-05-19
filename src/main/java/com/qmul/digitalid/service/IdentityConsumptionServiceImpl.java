@@ -12,11 +12,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class IdentityConsumptionImpl implements IdentityConsumptionService {
+public class IdentityConsumptionServiceImpl implements IdentityConsumptionService {
     private final DigitalIdRepository repository;
     private final LogService logService;
 
-    public IdentityConsumptionImpl(DigitalIdRepository repository, LogService logService) {
+    public IdentityConsumptionServiceImpl(DigitalIdRepository repository, LogService logService) {
         this.repository = repository;
         this.logService = logService;
     }

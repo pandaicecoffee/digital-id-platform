@@ -1,4 +1,4 @@
-package com.qmul.digitalid.portal.impl;
+package com.qmul.digitalid.portal.implementation;
 
 import com.qmul.digitalid.model.DigitalID;
 import com.qmul.digitalid.portal.ManagementPortal;
