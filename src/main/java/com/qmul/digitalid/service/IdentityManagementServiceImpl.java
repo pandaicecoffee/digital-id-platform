@@ -4,11 +4,13 @@ import com.qmul.digitalid.exception.DigitalIdNotFoundException;
 import com.qmul.digitalid.exception.DuplicateIdentityException;
 import com.qmul.digitalid.exception.InvalidOperationException;
 import com.qmul.digitalid.model.DigitalID;
+import com.qmul.digitalid.model.DigitalIDOperations;
 import com.qmul.digitalid.model.LogEventType;
 import com.qmul.digitalid.repository.DigitalIdRepository;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class IdentityManagementServiceImpl implements IdentityManagementService {
 
@@ -40,14 +42,14 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
                 nationality
         );
 
+        repository.save(digitalID);
+
         logService.record(
                 LogEventType.IDENTITY_CREATED,
                 id,
                 requestedBy,
                 "Created identity for " + firstName + " " + lastName
         );
-
-        repository.save(digitalID);
 
         return digitalID;
     }
@@ -72,70 +74,26 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
     @Override
     public void updateFirstName(String id, String newFirstName, String requestedBy) {
-        DigitalID digitalID = getOrThrow(id);
-
-        guardAgainstNonUpdatable(digitalID, requestedBy, "update first name");
-
-        digitalID.updateFirstName(newFirstName);
-
-        logService.record(
-                LogEventType.IDENTITY_UPDATED,
-                id,
-                requestedBy,
-                "First name updated to: " + newFirstName
-        );
-
-        repository.save(digitalID);
+        applyAttributeUpdate(id, requestedBy, "First name", newFirstName,
+                dig -> DigitalIDOperations.updateFirstName(dig, newFirstName));
     }
 
     @Override
     public void updateLastName(String id, String newLastName, String requestedBy) {
-        DigitalID digitalID = getOrThrow(id);
-
-        guardAgainstNonUpdatable(digitalID, requestedBy, "update last name");
-
-        digitalID.updateLastName(newLastName);
-
-        logService.record(
-                LogEventType.IDENTITY_UPDATED,
-                id,
-                requestedBy,
-                "Last name updated to: " + newLastName
-        );
-
-        repository.save(digitalID);
+        applyAttributeUpdate(id, requestedBy, "Last name", newLastName,
+                dig -> DigitalIDOperations.updateLastName(dig, newLastName));
     }
 
     @Override
     public void updateAddress(String id, String newAddress, String requestedBy) {
-        DigitalID digitalID = getOrThrow(id);
-        guardAgainstNonUpdatable(digitalID, requestedBy, "update address");
-        digitalID.updateAddress(newAddress);
-
-        logService.record(
-                LogEventType.IDENTITY_UPDATED,
-                id,
-                requestedBy,
-                "Address updated to: " + newAddress
-        );
-
-        repository.save(digitalID);
+        applyAttributeUpdate(id, requestedBy, "Address", newAddress,
+                dig -> DigitalIDOperations.updateAddress(dig, newAddress));
     }
 
     @Override
     public void updateNationality(String id, String newNationality, String requestedBy) {
-        DigitalID digitalID = getOrThrow(id);
-        guardAgainstNonUpdatable(digitalID, requestedBy, "update nationality");
-        digitalID.updateNationality(newNationality);
-
-        logService.record(
-                LogEventType.IDENTITY_UPDATED,
-                id,
-                requestedBy,
-                "Nationality updated to: " + newNationality
-        );
-
-        repository.save(digitalID);
+        applyAttributeUpdate(id, requestedBy, "Nationality", newNationality,
+                dig -> DigitalIDOperations.updateNationality(dig, newNationality));
     }
 
     @Override
@@ -148,7 +106,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
             );
         }
 
-        digitalID.suspend();
+        DigitalIDOperations.suspend(digitalID);
 
         logService.record(
                 LogEventType.STATUS_SUSPENDED,
@@ -166,11 +124,11 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
         if (!digitalID.getStatus().canBeReactivated()) {
             throw new InvalidOperationException(
-                    "Cannot reactivate Digital ID " + id
+                    "Cannot reactivate Digital ID " + id + " (current status: " + digitalID.getStatus() + ")"
             );
         }
 
-        digitalID.reactivate();
+        DigitalIDOperations.reactivate(digitalID);
 
         logService.record(
                 LogEventType.STATUS_REACTIVATED,
@@ -188,11 +146,11 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
 
         if (!digitalID.getStatus().canBeRevoked()) {
             throw new InvalidOperationException(
-                    "Cannot revoke Digital ID " + id
+                    "Cannot revoke Digital ID " + id + " (current status: " + digitalID.getStatus() + ")"
             );
         }
 
-        digitalID.revoke();
+        DigitalIDOperations.revoke(digitalID);
 
         logService.record(
                 LogEventType.STATUS_REVOKED,
@@ -231,7 +189,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
             throw new InvalidOperationException(
                     "Cannot " + operation
                             + " on a revoked Digital ID: "
-                            + digitalID.getId()
+                            + digitalID.getId() + " (status: " + digitalID.getStatus() + ")"
             );
         }
     }

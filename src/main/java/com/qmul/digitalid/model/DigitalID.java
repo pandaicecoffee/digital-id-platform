@@ -31,7 +31,8 @@ public class DigitalID {
     public String getNationalIdNumber() {
         return nationalIdNumber;
     }
-    public LocalDate getDateOfBirth() {return LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDayOfMonth());
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
     public String getFirstName() {
         return firstName;
@@ -67,15 +68,15 @@ public class DigitalID {
 
 
 
-    public void suspend() {
+    void suspend() {
         this.status = DigitalIDStatus.SUSPENDED;
     }
 
-    public void reactivate() {
+    void reactivate() {
         this.status = DigitalIDStatus.ACTIVE;
     }
 
-    public void revoke() {
+    void revoke() {
         this.status = DigitalIDStatus.REVOKED;
     }
 
