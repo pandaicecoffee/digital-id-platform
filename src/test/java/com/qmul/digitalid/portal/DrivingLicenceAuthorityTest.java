@@ -27,7 +27,7 @@ class DrivingLicenceAuthorityPortalTest {
         portal = new DrivingLicenceAuthorityPortal(consumptionService);
     }
 
-    private DigitalID createIdentity() {
+    private DigitalID createAdult() {
         return managementService.createIdentity(
                 "NIN-DVL-001", "Bob", "Jones",
                 LocalDate.of(1985, 3, 20), "Manchester", "British", "Test");
@@ -40,22 +40,30 @@ class DrivingLicenceAuthorityPortalTest {
     }
 
     @Test
-    void activeIdentityPassesVerification() {
-        DigitalID id = createIdentity();
+    void adultActiveIdentityPassesVerification() {
+        DigitalID id = createAdult();
         VerificationResult result = portal.verify(id.getId());
         assertTrue(result.valid());
     }
 
     @Test
-    void activeIdentityReceivesEligibilityMessage() {
-        DigitalID id = createIdentity();
+    void adultActiveIdentityReceivesEligibilityMessage() {
+        DigitalID id = createAdult();
         VerificationResult result = portal.verify(id.getId());
-        assertTrue(result.reason().contains("eligible"));
+        assertTrue(result.reason().contains("eligibility"));
+    }
+
+    @Test
+    void minorIsRejectedDueToAge() {
+        DigitalID id = createMinor();
+        VerificationResult result = portal.verify(id.getId());
+        assertFalse(result.valid());
+        assertTrue(result.reason().contains("minimum driving age"));
     }
 
     @Test
     void suspendedIdentityFailsVerification() {
-        DigitalID id = createIdentity();
+        DigitalID id = createAdult();
         managementService.suspendIdentity(id.getId(), "Test");
         VerificationResult result = portal.verify(id.getId());
         assertFalse(result.valid());
@@ -63,7 +71,7 @@ class DrivingLicenceAuthorityPortalTest {
 
     @Test
     void revokedIdentityFailsVerification() {
-        DigitalID id = createIdentity();
+        DigitalID id = createAdult();
         managementService.revokeIdentity(id.getId(), "Test");
         VerificationResult result = portal.verify(id.getId());
         assertFalse(result.valid());
@@ -76,8 +84,8 @@ class DrivingLicenceAuthorityPortalTest {
     }
 
     @Test
-    void reactivatedIdentityPassesVerificationAgain() {
-        DigitalID id = createIdentity();
+    void reactivatedAdultPassesVerificationAgain() {
+        DigitalID id = createAdult();
         managementService.suspendIdentity(id.getId(), "Test");
         managementService.reactivateIdentity(id.getId(), "Test");
         VerificationResult result = portal.verify(id.getId());
