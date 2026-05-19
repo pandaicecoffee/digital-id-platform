@@ -31,7 +31,7 @@ public class DigitalID {
     public String getNationalIdNumber() {
         return nationalIdNumber;
     }
-    private LocalDate getDateOfBirth() {return dateOfBirth;}
+    public LocalDate getDateOfBirth() {return dateOfBirth;}
     public String getFirstName() {
         return firstName;
     }
