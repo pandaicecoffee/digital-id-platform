@@ -10,11 +10,16 @@ public class LogEvent {
     private final LocalDateTime timestamp;
 
     public LogEvent(LogEventType type, String digitalIdRef, String performedBy, String description) {
+        this(type, digitalIdRef, performedBy, description, LocalDateTime.now());
+    }
+
+    public LogEvent(LogEventType type, String digitalIdRef, String performedBy,
+                    String description, LocalDateTime timestamp) {
         this.type = type;
         this.digitalIdRef = digitalIdRef;
         this.performedBy = performedBy;
         this.description = description;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = timestamp;
     }
 
     public LogEventType getType() {
