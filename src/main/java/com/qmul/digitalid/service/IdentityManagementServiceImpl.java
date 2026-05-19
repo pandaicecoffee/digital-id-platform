@@ -56,7 +56,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     public void updateFirstName(String id, String newFirstName, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
-        guardAgainstRevoked(digitalID, requestedBy, "update first name");
+        guardAgainstNonUpdatable(digitalID, requestedBy, "update first name");
 
         digitalID.updateFirstName(newFirstName);
 
@@ -74,7 +74,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     public void updateLastName(String id, String newLastName, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
-        guardAgainstRevoked(digitalID, requestedBy, "update last name");
+        guardAgainstNonUpdatable(digitalID, requestedBy, "update last name");
 
         digitalID.updateLastName(newLastName);
 
@@ -91,7 +91,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     @Override
     public void updateAddress(String id, String newAddress, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
-        guardAgainstRevoked(digitalID, requestedBy, "update address");
+        guardAgainstNonUpdatable(digitalID, requestedBy, "update address");
         digitalID.updateAddress(newAddress);
 
         logService.record(
@@ -107,7 +107,7 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     @Override
     public void updateNationality(String id, String newNationality, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
-        guardAgainstRevoked(digitalID, requestedBy, "update nationality");
+        guardAgainstNonUpdatable(digitalID, requestedBy, "update nationality");
         digitalID.updateNationality(newNationality);
 
         logService.record(
@@ -197,9 +197,9 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
                 .orElseThrow(() -> new DigitalIdNotFoundException(id));
     }
 
-    private void guardAgainstRevoked(DigitalID digitalID,
-                                     String requestedBy,
-                                     String operation) {
+    private void guardAgainstNonUpdatable(DigitalID digitalID,
+                                          String requestedBy,
+                                          String operation) {
 
         if (!digitalID.getStatus().canBeUpdated()) {
 
