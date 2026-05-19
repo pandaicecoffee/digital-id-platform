@@ -42,6 +42,10 @@ public class CentralAuthorityPortal implements ManagementPortal {
         managementService.updateAddress(id, newAddress, ORG_NAME);
     }
 
+    public void updateNationality(String id, String newNationality) {
+        managementService.updateNationality(id, newNationality, ORG_NAME);
+    }
+
     @Override
     public void suspendIdentity(String id) {
         managementService.suspendIdentity(id, ORG_NAME);

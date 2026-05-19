@@ -2,6 +2,7 @@ package com.qmul.digitalid;
 
 import com.qmul.digitalid.exception.InvalidOperationException;
 import com.qmul.digitalid.model.DigitalID;
+import com.qmul.digitalid.model.LogEvent;
 import com.qmul.digitalid.portal.VerificationPortal;
 import com.qmul.digitalid.portal.VerificationResult;
 import com.qmul.digitalid.portal.implementation.*;
@@ -9,6 +10,7 @@ import com.qmul.digitalid.repository.InMemoryDigitalIdRepository;
 import com.qmul.digitalid.service.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
 
@@ -165,7 +167,34 @@ public class Main {
         section("LOG");
 
         logService.printAll();
+
+        section("SCENARIO 12 — Show Portal Types");
+        for (VerificationPortal p : List.of(taxPortal, drivingLicencePortal, employerPortal, bankPortal, airportPortal)) {
+            System.out.println(p.getOrganisationName() + " is a " + p.getPortalType() + " portal");
+        }
+
+        section("SCENARIO 13 — Update Nationality");
+        authority.updateNationality(aleena.getId(), "Irish");
+        DigitalID updated = authority.lookupIdentity(aleena.getId());
+        System.out.println("DOB: " + updated.getDateOfBirth());
+        System.out.println("Nationality: " + updated.getNationality());
+
+        section("SCENARIO 14 — Lookup by National ID Number");
+        repository.findByNationalIdNumber("NIN-001")
+                .ifPresent(d -> System.out.println("Found by NIN: " + d));
+
+        section("SCENARIO 15 — Find All Identities");
+        repository.findAll().forEach(d -> System.out.println("  " + d));
+
+        section("SCENARIO 16  — Log Summary");
+        List<LogEvent> allLogs = logService.getAll();
+        System.out.println("Total log entries: " + allLogs.size());
+        allLogs.stream().limit(3).forEach(e ->
+                System.out.println("  By: " + e.getPerformedBy() + " | " + e.getDescription())
+        );
     }
+
+
 
     private static void section(String title) {
         System.out.println("\n========================================");

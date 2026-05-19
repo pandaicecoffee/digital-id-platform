@@ -61,7 +61,7 @@ public class DigitalID {
         this.address = Objects.requireNonNull(address, "Address must not be null");
     }
 
-    void updateNationality(String nationality) {
+    public void updateNationality(String nationality) {
         this.nationality = Objects.requireNonNull(nationality, "Nationality must not be null");
     }
 

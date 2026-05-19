@@ -105,6 +105,22 @@ public class IdentityManagementServiceImpl implements IdentityManagementService 
     }
 
     @Override
+    public void updateNationality(String id, String newNationality, String requestedBy) {
+        DigitalID digitalID = getOrThrow(id);
+        guardAgainstRevoked(digitalID, requestedBy, "update nationality");
+        digitalID.updateNationality(newNationality);
+
+        logService.record(
+                LogEventType.IDENTITY_UPDATED,
+                id,
+                requestedBy,
+                "Nationality updated to: " + newNationality
+        );
+
+        repository.save(digitalID);
+    }
+
+    @Override
     public void suspendIdentity(String id, String requestedBy) {
         DigitalID digitalID = getOrThrow(id);
 
