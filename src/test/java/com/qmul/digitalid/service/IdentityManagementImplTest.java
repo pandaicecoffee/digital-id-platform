@@ -50,8 +50,8 @@ class IdentityManagementImplTest {
     void canSuspendActiveIdentity() {
         DigitalID id = createAleena();
         service.suspendIdentity(id.getId(), "Test");
-        assertEquals(DigitalIDStatus.SUSPENDED, repository.findById(id.getId()).get().getStatus());
-    }
+        assertEquals(DigitalIDStatus.SUSPENDED,
+                repository.findById(id.getId()).orElseThrow().getStatus());    }
 
     @Test
     void cannotSuspendAlreadySuspendedIdentity() {
@@ -66,8 +66,8 @@ class IdentityManagementImplTest {
         DigitalID id = createAleena();
         service.suspendIdentity(id.getId(), "Test");
         service.reactivateIdentity(id.getId(), "Test");
-        assertEquals(DigitalIDStatus.ACTIVE, repository.findById(id.getId()).get().getStatus());
-    }
+        assertEquals(DigitalIDStatus.ACTIVE,
+                repository.findById(id.getId()).orElseThrow().getStatus());    }
 
     @Test
     void cannotReactivateActiveIdentity() {
@@ -80,16 +80,16 @@ class IdentityManagementImplTest {
     void canRevokeActiveIdentity() {
         DigitalID id = createAleena();
         service.revokeIdentity(id.getId(), "Test");
-        assertEquals(DigitalIDStatus.REVOKED, repository.findById(id.getId()).get().getStatus());
-    }
+        assertEquals(DigitalIDStatus.REVOKED,
+                repository.findById(id.getId()).orElseThrow().getStatus());    }
 
     @Test
     void canRevokeSuspendedIdentity() {
         DigitalID id = createAleena();
         service.suspendIdentity(id.getId(), "Test");
         service.revokeIdentity(id.getId(), "Test");
-        assertEquals(DigitalIDStatus.REVOKED, repository.findById(id.getId()).get().getStatus());
-    }
+        assertEquals(DigitalIDStatus.REVOKED,
+                repository.findById(id.getId()).orElseThrow().getStatus());    }
 
     @Test
     void cannotRevokeAlreadyRevokedIdentity() {
@@ -112,7 +112,7 @@ class IdentityManagementImplTest {
         DigitalID id = createAleena();
         service.updateAddress(id.getId(), "New Road, Manchester", "Test");
         assertEquals("New Road, Manchester",
-                repository.findById(id.getId()).get().getAddress());
+                repository.findById(id.getId()).orElseThrow().getAddress());
     }
 
     @Test
