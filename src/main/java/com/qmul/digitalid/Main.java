@@ -58,14 +58,23 @@ public class Main {
         System.out.println("Created: " + aleena);
 
 
-        section("SCENARIO 2 — Multi-portal Verification (ACTIVE)");
+        section("SCENARIO 2 — Update Name");
+
+        authority.updateFirstName(aleena.getId(), "Aleena");
+        authority.updateLastName(aleena.getId(), "Joseph");
+        System.out.println("Updated name: " + authority.lookupIdentity(aleena.getId()));
+
+
+        section("SCENARIO 3 — Multi-portal Verification (ACTIVE)");
 
         verify(taxPortal, aleena.getId());
         verify(drivingLicencePortal, aleena.getId());
         verify(employerPortal, aleena.getId());
+        verify(bankPortal, aleena.getId());
+        verify(airportPortal, aleena.getId());
 
 
-        section("SCENARIO 3 — Suspend Identity");
+        section("SCENARIO 4 — Suspend Identity");
 
         authority.suspendIdentity(aleena.getId());
 
@@ -76,9 +85,11 @@ public class Main {
 
         verify(taxPortal, aleena.getId());
         verify(employerPortal, aleena.getId());
+        verify(bankPortal, aleena.getId());
+        verify(airportPortal, aleena.getId());
 
 
-        section("SCENARIO 4 — Reactivate Identity");
+        section("SCENARIO 5 — Reactivate Identity");
 
         authority.reactivateIdentity(aleena.getId());
 
@@ -90,7 +101,7 @@ public class Main {
         verify(drivingLicencePortal, aleena.getId());
 
 
-        section("SCENARIO 5 — Update Address");
+        section("SCENARIO 6 — Update Address");
 
         authority.updateAddress(
                 aleena.getId(),
@@ -102,8 +113,12 @@ public class Main {
                         + authority.lookupIdentity(aleena.getId())
         );
 
+        section("SCENARIO 7 — Tax Period Check (was suspended in period)");
 
-        section("SCENARIO 6 — Revoke Identity");
+        // aleena was suspended during 2024, so this should fail the period check
+        verify(taxPortal, aleena.getId());
+
+        section("SCENARIO 8 — Revoke Identity");
 
         authority.revokeIdentity(aleena.getId());
 
@@ -114,9 +129,11 @@ public class Main {
 
         verify(taxPortal, aleena.getId());
         verify(employerPortal, aleena.getId());
+        verify(bankPortal, aleena.getId());
+        verify(airportPortal, aleena.getId());
 
 
-        section("SCENARIO 7 — Attempt Operation on Revoked Identity");
+        section("SCENARIO 9 — Attempt Operation on Revoked Identity");
 
         try {
             authority.updateAddress(
@@ -129,10 +146,7 @@ public class Main {
             );
         }
 
-        // =========================================================
-        // SCENARIO 8 — Attempt suspend on revoked identity
-        // =========================================================
-        section("SCENARIO 8 — Attempt to Suspend Revoked Identity");
+        section("SCENARIO 10 — Attempt to Suspend Revoked Identity");
 
         try {
             authority.suspendIdentity(aleena.getId());
@@ -143,9 +157,10 @@ public class Main {
         }
 
 
-        section("SCENARIO 9 — Verify Non-existent Identity");
+        section("SCENARIO 11 — Verify Non-existent Identity");
 
         verify(taxPortal, "non-existent-id-999");
+        verify(airportPortal, "non-existent-id-999");
 
         section("LOG");
 
