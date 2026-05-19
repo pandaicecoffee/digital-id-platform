@@ -34,14 +34,8 @@ public class IdentityConsumptionServiceImpl implements IdentityConsumptionServic
 
         if (!digitalID.getStatus().isUsableByConsumers()) {
             logService.record(LogEventType.VERIFICATION_FAILED, digitalIdRef,
-                    requestedBy, "ID is revoked");
-            return new VerificationResult(false, "Digital ID has been permanently revoked");
-        }
-
-        if (digitalID.getStatus() == DigitalIDStatus.SUSPENDED) {
-            logService.record(LogEventType.VERIFICATION_FAILED, digitalIdRef,
-                    requestedBy, "ID is suspended");
-            return new VerificationResult(false, "Digital ID is currently suspended");
+                    requestedBy, "ID is revoked or suspended");
+            return new VerificationResult(false, "Digital ID has been suspended or permanently revoked");
         }
 
         logService.record(LogEventType.VERIFICATION_SUCCESS, digitalIdRef,
