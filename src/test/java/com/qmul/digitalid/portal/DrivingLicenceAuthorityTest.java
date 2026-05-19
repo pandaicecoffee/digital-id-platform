@@ -50,7 +50,7 @@ class DrivingLicenceAuthorityTest {
     void adultActiveIdentityReceivesEligibilityMessage() {
         DigitalID id = createAdult();
         VerificationResult result = portal.verify(id.getId());
-        assertTrue(result.reason().contains("eligibility"));
+        assertTrue(result.reason().contains("eligible"));
     }
 
     @Test
