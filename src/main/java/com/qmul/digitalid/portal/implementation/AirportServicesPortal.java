@@ -6,14 +6,18 @@ import com.qmul.digitalid.portal.VerificationPortal;
 import com.qmul.digitalid.model.VerificationResult;
 import com.qmul.digitalid.service.IdentityConsumptionService;
 import java.util.Optional;
+import java.util.Set;
 
 public class AirportServicesPortal implements VerificationPortal {
 
     private static final String ORG_NAME = "Airport Services";
     private final IdentityConsumptionService consumptionService;
+    private final Set<String> permittedNationalities;
 
-    public AirportServicesPortal(IdentityConsumptionService consumptionService) {
+    public AirportServicesPortal(IdentityConsumptionService consumptionService,
+                                 Set<String> permittedNationalities) {
         this.consumptionService = consumptionService;
+        this.permittedNationalities = Set.copyOf(permittedNationalities);
     }
 
     @Override
@@ -24,23 +28,25 @@ public class AirportServicesPortal implements VerificationPortal {
 
     @Override
     public VerificationResult verify(String identificationID) {
-        // Airport needs: exists, not suspended, not revoked, active
+        VerificationResult activeCheck = consumptionService.verifyIsActive(identificationID, ORG_NAME);
+        if (!activeCheck.valid()) {
+            return new VerificationResult(false,
+                    "Check-in denied — " + activeCheck.reason());
+        }
+
         Optional<DigitalID> found = consumptionService.lookup(identificationID, ORG_NAME);
 
         if (found.isEmpty()) {
-            return new VerificationResult(false, "No registered Digital ID found for this traveller");
+            return new VerificationResult(false, "Check-in denied as identity could not be retrieved for this traveller");
         }
 
-        DigitalID digitalID = found.get();
+        DigitalID identity = found.get();
 
-        if (digitalID.getStatus() == DigitalIDStatus.REVOKED) {
+        if (!permittedNationalities.isEmpty()
+                && !permittedNationalities.contains(identity.getNationality())) {
             return new VerificationResult(false,
-                    "Digital ID has been permanently revoked — check-in denied");
-        }
-
-        if (digitalID.getStatus() == DigitalIDStatus.SUSPENDED) {
-            return new VerificationResult(false,
-                    "Digital ID is currently suspended — check-in denied");
+                    "Check-in denied — nationality '" + identity.getNationality()
+                            + "' is not on the permitted list for this route");
         }
 
         return new VerificationResult(true,
