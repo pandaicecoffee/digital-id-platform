@@ -116,6 +116,67 @@ class IdentityManagementImplTest {
     }
 
     @Test
+    void canUpdateAddressOnSuspendedIdentity() {
+        DigitalID id = createAleena();
+        service.suspendIdentity(id.getId(), "Test");
+        assertDoesNotThrow(() -> service.updateAddress(id.getId(), "New Road, Leeds", "Test"));
+    }
+
+    @Test
+    void updatesFirstNameOnActiveIdentity() {
+        DigitalID id = createAleena();
+        service.updateFirstName(id.getId(), "Aleena", "Test");
+        assertEquals("Aleena", repository.findById(id.getId()).orElseThrow().getFirstName());
+    }
+
+    @Test
+    void canUpdateFirstNameOnSuspendedIdentity() {
+        DigitalID id = createAleena();
+        service.suspendIdentity(id.getId(), "Test");
+        assertDoesNotThrow(() -> service.updateFirstName(id.getId(), "Aleena", "Test"));
+    }
+
+    @Test
+    void cannotUpdateFirstNameOnRevokedIdentity() {
+        DigitalID id = createAleena();
+        service.revokeIdentity(id.getId(), "Test");
+        assertThrows(InvalidOperationException.class,
+                () -> service.updateFirstName(id.getId(), "Aleena", "Test"));
+    }
+
+    @Test
+    void updatesNationalityOnActiveIdentity() {
+        DigitalID id = createAleena();
+        service.updateNationality(id.getId(), "Irish", "Test");
+        assertEquals("Irish", repository.findById(id.getId()).orElseThrow().getNationality());
+    }
+
+    @Test
+    void cannotUpdateNationalityOnRevokedIdentity() {
+        DigitalID id = createAleena();
+        service.revokeIdentity(id.getId(), "Test");
+        assertThrows(InvalidOperationException.class,
+                () -> service.updateNationality(id.getId(), "Irish", "Test"));
+    }
+
+    @Test
+    void dateOfBirthRemainsUnchangedAfterOtherUpdates() {
+        DigitalID id = createAleena();
+        service.updateFirstName(id.getId(), "Aleena", "Test");
+        service.updateAddress(id.getId(), "New Road", "Test");
+        assertEquals(LocalDate.of(1990, 1, 1),
+                repository.findById(id.getId()).orElseThrow().getDateOfBirth());
+    }
+
+    @Test
+    void nationalIdNumberRemainsUnchangedAfterOtherUpdates() {
+        DigitalID id = createAleena();
+        service.updateFirstName(id.getId(), "Aleena", "Test");
+        assertEquals("NIN-001",
+                repository.findById(id.getId()).orElseThrow().getNationalIdNumber());
+    }
+
+    @Test
     void throwsWhenIdNotFound() {
         assertThrows(DigitalIdNotFoundException.class,
                 () -> service.findById("does-not-exist"));
