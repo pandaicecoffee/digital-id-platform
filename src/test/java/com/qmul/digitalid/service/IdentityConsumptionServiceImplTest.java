@@ -15,11 +15,13 @@ class IdentityConsumptionServiceImplTest {
 
     private IdentityManagementService managementService;
     private IdentityConsumptionService consumptionService;
+    private InMemoryLogService logService;
+
 
     @BeforeEach
     void setUp() {
         InMemoryDigitalIdRepository repository = new InMemoryDigitalIdRepository();
-        LogService logService = new InMemoryLogService();
+        logService = new InMemoryLogService();
         managementService = new IdentityManagementServiceImpl(repository, logService);
         consumptionService = new IdentityConsumptionServiceImpl(repository, logService);
     }
